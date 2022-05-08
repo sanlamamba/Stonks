@@ -1,5 +1,13 @@
 <?php
 
+function stringController($str)
+{
+    $str = strip_tags($str);
+    $str = htmlspecialchars($str);
+    $str = trim($str);
+    return $str;
+}
+
 function generateRandomId()
 {
     //Generate a string of int that could be used as id
@@ -36,22 +44,3 @@ function generateId()
     }
     return $id;
 }
-
-
-
-
-    // $password_salt = '$2y$11$'.substr(bin2hex(openssl_random_pseudo_bytes(32)), 0, 22);
-
-
-    // function hashMyPassword($user_input){
-    //     global $password_salt;
-    //     return crypt($user_input, $password_salt);
-    // }
-
-    // function checkMyPassword($user_input, $hashed_password){
-    //     global $password_salt;
-    //     return crypt($user_input, $password_salt) == $password_salt;
-    // }
-
-    // // echo '$2y$11$055fda95f3b9a58b32080ulVtsp1kmRnhNp6mpjSVk7.YxZNKQ5Y6 ';
-    // echo checkMyPassword("password", "$2y$11$055fda95f3b9a58b32080ulVtsp1kmRnhNp6mpjSVk7.YxZNKQ5Y6 ");

@@ -7,6 +7,7 @@ class Commande extends Dbh
   public function getCommandes()
   {
     $sql = "SELECT * FROM commande";
+    $sql = stringController($sql);
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute();
 
