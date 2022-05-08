@@ -1,275 +1,415 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <?php
-    include("../components/head.php")
+include("../components/head.php");
+
+$clients = new Utilisateur();
+$stock = new Stock();
+$commandes = new Commande();
+$paniers = new Panier();
+
+
+$client_filter = null;
+$date_filter = null;
+$date_array = [];
+$commande_filter = null;
+$commande = $commandes->getCommandes();
+
+
+if (isset($_POST['editPanier'])) {
+    $panier_id = $_POST['id'];
+    $panier = $paniers->getPanierByID($panier_id);
+    $paniers->updatePanierLivrer($_POST['quantite'] + $panier['livrer'], $_POST['id']);
+    // substract from quantity in stock
+    $stock->updateStockQuantite($panier['quantite'] - $_POST['quantite'], $panier['produit_id']);
+
+    // head to self and exit
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit();
+}
+
+
+$client = $clients->getUtilisateurByType("client");
+if (isset($_GET['recherche'])) {
+    $client_filter = $clients->searchUser($_GET['recherche']);
+}
+if (isset($_GET['client'])) {
+    $client_filter = $clients->getUtilisateurByID($_GET['client']);
+    $commande = $commandes->getCommandesByClient($client_filter['id']);
+
+    // send commande dates to a variable and return it
+    foreach ($commande as $key => $value) {
+        array_push($date_array, $value['date_commande']);
+    };
+    $date_array = array_unique($date_array);
+}
+if (isset($_GET['date'])) {
+    $date_filter = $_GET['date'];
+}
+if (isset($_GET['commande'])) {
+    $commande_filter = $_GET['commande'];
+    $commande = $commandes->getCommandeByID($commande_filter);
+}
+
+
+
 ?>
 
-<body id="page-top">
-    <!-- MAIN -->
-    <div id="wrapper">
-        <!-- SIDEBAR -->
+<!-- SIDEBAR -->
+<?php
+include_once("../components/sidebar.php")
+?>
+<!-- End of Sidebar -->
+
+<!-- Content -->
+<div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+        <!-- Topbar -->
         <?php
-            include_once("../components/sidebar.php")
+        include_once("../components/topbar.php");
         ?>
-        <!-- End of Sidebar -->
+        <!-- End of Topbar -->
 
-        <!-- Content -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
 
-            <!-- Main Content -->
-            <div id="content">
+            <!-- Page Heading -->
+            <h1 class="h3 mb-2 text-gray-800">
+                Gestion des livraisons
+                <?= $client_filter !== null ? "de " . $client_filter['nom'] . " " . $client_filter['prenom'] : "? " ?>
+            </h1>
+            <?php
+            if ($client_filter !== null) {
+                // get adresse from utilisateur table using client_flter['id']
+                $adresse = $clients->getUtilisateurByID($client_filter['id'])['adresse'];
+            ?>
+            <p class="mb-1 text-muted">
+                Addresse du client : <strong> <?= $adresse ?></strong>
+            </p>
+            <?php } ?>
 
-                <!-- Topbar -->
-                <?php
-                    include_once("../components/topbar.php");
-                ?>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Gestion des livraisons ? de ********</h1>
-
-                    <p class="mb-1 text-muted">
-                        ?Addresse du client : <strong> **** *** * * ** **** *</strong>
-                    </p>
-                    <p class="mb-4">
-                        Vous pouvez creer un nouveau livraison en
-                        <a href="nouveaulivraison.php">
-                            cliquant ici
-                        </a>.
-                        <br />
-                        Vous pouvez imprimer une liste des livraisons en
-                        <a href="imprimerlivraison.php">
-                            cliquant ici
-                        </a>.
-                    </p>
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-2">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">
-                                Commande #1 ? Veuillez renseigner les informations
-                            </h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <form class="col-5 mb-4">
-                                    <!-- SEARCH BY CLIENT INPUT -->
-                                    <label for="searchByClient">
-                                        Rechercher par client
-                                    </label>
-                                    <div class="row d-flex">
-                                        <div class="col-10">
-                                            <input type="text" class="form-control" id="searchByClient"
-                                                placeholder="Entrer le nom du client">
-                                        </div>
-                                        <!-- SUBMIT input only icon -->
-                                        <form class="col-2">
-                                            <button class="btn btn-primary " type="submit">
-                                                <span class="icon text-white-60 ">
-                                                    <i class="fas fa-search"></i>
-                                                </span>
-                                            </button>
-                                        </form>
-
-                                    </div>
-
+            <p class="mb-4">
+                Vous pouvez creer un nouveau livraison en
+                <a href="nouveaulivraison.php">
+                    cliquant ici
+                </a>.
+                <br />
+                Vous pouvez imprimer une liste des livraisons en
+                <a href="imprimerlivraison.php">
+                    cliquant ici
+                </a>.
+            </p>
+            <!-- DataTales Example -->
+            <div class="card shadow mb-2">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Commande #1 ? Veuillez renseigner les informations
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <form class="col-5 mb-4">
+                            <!-- SEARCH BY CLIENT INPUT -->
+                            <label for="searchByClient">
+                                Rechercher par client
+                            </label>
+                            <div class="row d-flex">
+                                <div class="col-10">
+                                    <input required name="recherche" type="text" class="form-control"
+                                        id="searchByClient" placeholder="Entrer le nom, prenom ou id du client">
+                                </div>
+                                <!-- SUBMIT input only icon -->
+                                <form class="col-2">
+                                    <button type="submit" class="btn btn-primary " type="submit">
+                                        <span class="icon text-white-60 ">
+                                            <i class="fas fa-search"></i>
+                                        </span>
+                                    </button>
                                 </form>
-                            </div>
-                            <div class="row">
-
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label for="exampleFormControlSelect1">
-                                            Filtrer par client
-                                        </label>
-                                        <select class="form-control" id="exampleFormControlSelect1">
-                                            <option>Tous</option>
-                                            <option>Client 1</option>
-                                            <option>Client 2</option>
-                                            <option>Client 3</option>
-                                        </select>
-                                    </div>
-
-                                </div>
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label for="exampleFormControlSelect1">
-                                            Filtrer par date
-                                        </label>
-                                        <select class="form-control" id="exampleFormControlSelect1">
-                                            <option>Tous</option>
-                                            <option>Aujourd'hui</option>
-                                            <option>Hier</option>
-                                            <option>Cette semaine</option>
-                                            <option>Ce mois</option>
-                                            <option>Cette année</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="form-group">
-                                        <label for="exampleFormControlSelect1">
-                                            Commande Correspondante
-                                        </label>
-                                        <select class="form-control" id="exampleFormControlSelect1">
-                                            <option>Tous</option>
-                                            <option>En cours</option>
-                                            <option>Livré</option>
-                                            <option>Annulé</option>
-                                        </select>
-                                    </div>
-                                </div>
 
                             </div>
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>N Comande</th>
-                                            <th>Date</th>
-                                            <th>Date livraison</th>
-                                            <th>Details</th>
-                                            <th>Modifier</th>
-                                            <th>Livraison</th>
-                                            <th>Supprimer</th>
-                                            <th>Imprimer Facture</th>
-                                        </tr>
-                                    </thead>
 
-                                    <tbody>
-                                        <tr>
-                                            <td>N 01</td>
-                                            <td>11/06/2018</td>
-                                            <td>25/06/2018</td>
-                                            <td>
-                                                <a href="#" class='btn btn-success'>
-                                                    <i class="fas fa-fw fa-eye"></i>
-                                                </a>
-                                                ?
-                                                <a href="#" class='btn btn-danger'>
-                                                    <i class="fas fa-fw fa-eye-slash"></i>
-                                                </a>
-
-                                            </td>
-                                            <td class='text-danger'>Indisponible</td>
-                                            <td class='text-success'>Livraison Terminée</td>
-                                            <td class='text-danger'>Indisponible</td>
-                                            <td class='d-flex justify-content-center'>
-                                                <a href="#" class='btn btn-warning'>
-                                                    <i class="fas fa-fw fa-print"></i>
-                                                </a>
-
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        </form>
                     </div>
+                    <form class="row d-flex align-items-end">
 
-                    <div class='card shadow'>
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">
-                                Details de la commande
-                            </h6>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">
+                                    <small>
+                                        Filtrer par client
+                                    </small>
+                                </label>
+                                <?php if ($client_filter !== null) { ?>
+                                <input readonly hidden name="client" class="form-control"
+                                    value="<?= $client_filter['id'] ?>" />
+                                <span class="form-control">
+                                    <?= $client_filter['nom'] . " " . $client_filter['prenom'] ?>
+                                </span>
+                                <?php } else { ?>
+                                <select required name="client" class="form-control" id="exampleFormControlSelect1">
+                                    <?php if (!isset($_GET['recherche'])) { ?>
+                                    <option value="">Tous</option>
+                                    <?php } ?>
+                                    <?php
+                                        foreach ($client as $cl) {
+                                            echo "<option value='" . $cl['id'] . "'>" . $cl['nom'] . " " . $cl['prenom'] . "</option>";
+                                        }
+                                        ?>
+                                </select>
+                                <?php } ?>
+                            </div>
+
                         </div>
-                        <div class="card-body">
+                        <?php
+                        if ($client_filter !== null) { ?>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">
+                                    <small>
+                                        Filtrer par date
+                                    </small>
+                                </label>
+                                <?php if ($date_filter !== null) { ?>
+                                <input readonly hidden name="date" class="form-control" value="<?= $date_filter ?>" />
+                                <span class="form-control">
+                                    <?= $date_filter ?>
+                                </span>
+                                <?php } else { ?>
 
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Designation</th>
-                                            <th>P.U.</th>
-                                            <th>Qte Commandée</th>
-                                            <th>PTTC</th>
-                                            <th>Qte Livrée</th>
-                                            <th>Qte a livrée</th>
-                                            <th>Qte&nbsp;non&nbsp;livrée</th>
-                                            <th>Modifier</th>
-                                            <th>Supprimer</th>
-                                        </tr>
-                                    </thead>
+                                <select required name="date" class="form-control" id="exampleFormControlSelect1">
+                                    <option value="">Selectionner une date</option>
+                                    <?php
 
-                                    <tbody>
-                                        <tr>
-                                            <td>On Almond</td>
-                                            <td>200</td>
-                                            <td>100</td>
-                                            <td>20000</td>
-                                            <td>5</td>
-                                            <td class='text-danger'>
-                                                <i class="fas fa-fw fa-ban "></i>
-                                                ?
-                                                <!-- Input with a button with only an icon -->
-                                                <form class="form-inline">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control"
-                                                            placeholder="Qte livrée">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-primary" type="button">
-                                                                <span class="icon text-white-60">
-                                                                    <i class="fas fa-fw fa-check"></i>
-                                                                </span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-
-                                            </td>
-
-                                            <td class='text-success'>Livraison Terminée</td>
-                                            <td class='text-danger'>Indisponible</td>
-                                            <td class='d-flex justify-content-center'>
-                                                <a href="#" class='btn btn-warning'>
-                                                    <i class="fas fa-fw fa-print"></i>
-                                                </a>
-
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                            foreach ($date_array as $date) {
+                                                echo "<option value='" . $date . "'>" . $date . "</option>";
+                                            }
+                                            ?>
+                                </select>
+                                <?php } ?>
                             </div>
                         </div>
+                        <?php } ?>
+                        <?php if ($date_filter !== null) { ?>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">
+                                    N Commande
+                                </label>
+                                <select name="commande" class="form-control" id="exampleFormControlSelect1">
+                                    <option value="">Selectionner une commande</option>
+                                    <?php
+                                        foreach ($commande as $cmd) {
+                                            echo "<option value='" . $cmd['id'] . "'>" . "Commande N " . $cmd['id'] . "</option>";
+                                        }
+                                        ?>
+
+                                </select>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <div class="col-3">
+                            <!-- apply filter button  -->
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary " type="submit">
+                                    Filtrer
+
+                                    <span class="icon text-white-60 ">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                            </div>
+                        </div>
+
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>N Comande</th>
+                                    <th>Date</th>
+                                    <th>Date livraison</th>
+                                    <th>Details</th>
+                                    <th>Modifier</th>
+                                    <th>Livraison</th>
+                                    <th>Supprimer</th>
+                                    <th>Imprimer Facture</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <?php
+                                if ($commande !== null) {
+                                    foreach ($commande as $c) {
+                                ?>
+
+                                <tr>
+                                    <td>N <?= $c['id'] ?></td>
+                                    <td><?= $c['date_commande'] ?></td>
+                                    <td><?= $c['date_livraison'] ?></td>
+                                    <td>
+                                        <?php
+                                                if (!isset($_GET['view'])) { ?>
+                                        <a href='<?= $_SERVER['REQUEST_URI'] . '&view' ?>' class='btn btn-success'>
+                                            <i class="fas fa-fw fa-eye"></i>
+                                        </a>
+                                        <?php } else { ?>
+                                        <!-- link without the view in the url -->
+                                        <a href='<?= str_replace('&view', '', $_SERVER['REQUEST_URI']) ?>'
+                                            class='btn btn-danger'>
+                                            <i class="fas fa-fw fa-eye-slash"></i>
+                                        </a>
+                                        <?php } ?>
+
+
+                                    </td>
+                                    <td class='text-danger'>Indisponible</td>
+                                    <td class='text-success'><?= $c['status'] ?></td>
+                                    <td class='text-danger'>Indisponible</td>
+                                    <td class='d-flex justify-content-center'>
+                                        <a href="#" class='btn btn-warning'>
+                                            <i class="fas fa-fw fa-print"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                                <?php
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='8'>Aucune commande</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
-
             </div>
-
-            <!-- Footer -->
             <?php
-                include_once("../components/footer.php");
-            ?>
-            <!-- End of Footer -->
+            if (isset($_GET['view'])) { ?>
+            <div class='card shadow'>
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Details de la commande
+                    </h6>
+                </div>
+                <div class="card-body">
 
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Designation</th>
+                                    <th>P.U.</th>
+                                    <th>Qte Commandée</th>
+                                    <th>PTTC</th>
+                                    <th>Qte Livrée</th>
+                                    <th>Qte a livrée</th>
+                                    <th>Qte&nbsp;non&nbsp;livrée</th>
+                                    <th>Modifier</th>
+                                    <th>Supprimer</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <?php
+                                    if ($commande !== null) {
+                                        $panier_id = $c['panier_id'];
+                                        foreach ($paniers->getPanierByPanierID($panier_id) as $panier) {
+                                        } ?>
+                                <tr>
+                                    <td>
+                                        <?= $stock->getStockByID($panier['produit_id'])['designation'] ?>
+                                    </td>
+                                    <td>
+                                        <?= number_format($stock->getStockByID($panier['produit_id'])['prix']) . "F" ?>
+                                    </td>
+
+                                    <td>
+                                        <?= $panier['quantite'] ?>
+                                    </td>
+                                    <td>
+                                        <?= number_format($panier['quantite'] * $stock->getStockByID($panier['produit_id'])['prix']) . "F" ?>
+                                    </td>
+                                    <td>
+                                        <?= $panier['livrer'] ?>
+                                    </td>
+                                    <td class='text-danger'>
+                                        <?php
+                                                if ($panier['quantite'] <= $panier['livrer']) { ?>
+                                        <i class="fas fa-fw fa-ban "></i>
+                                        <?php } else { ?>
+                                        <form method="post" class="form-inline">
+                                            <div class="input-group">
+                                                <input required name="quantite" type="number" class="form-control"
+                                                    placeholder="Qte livrée">
+                                                <input type="hidden" name="id" value="<?= $panier['id'] ?>">
+                                                <div class="input-group-append">
+                                                    <button name="editPanier" class="btn btn-primary" type="submit">
+                                                        <span class="icon text-white-60">
+                                                            <i class="fas fa-fw fa-check"></i>
+                                                        </span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <?php } ?>
+                                    </td>
+
+                                    <td class='text-success'>
+                                        <?php
+                                                if ($panier['quantite'] <= $panier['livrer']) {
+                                                    echo "livraison terminée";
+                                                } else {
+                                                    echo $panier['quantite'] - $panier['livrer'];
+                                                }
+                                                ?>
+                                    </td>
+                                    <td class='text-danger'>Indisponible</td>
+                                    <td class='d-flex justify-content-center'>
+                                        <a href="#" class='btn btn-warning'>
+                                            <i class="fas fa-fw fa-print"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                                <?php
+                                    } else {
+                                        echo "<tr><td colspan='8'>Aucune commande</td></tr>";
+                                    }
+                                    ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- End of Content Wrapper -->
+        <?php } ?>
 
     </div>
-    <!-- End of Page Wrapper -->
 
-    <!-- Scroll to Top Button-->
+    <!-- Footer -->
     <?php
-        include_once("../components/modals/backToTop.php");
+    include_once("../components/footer.php");
     ?>
-    <!-- Logout Modal-->
-    <?php
-        include_once("../components/modals/logout.php");
-    ?>
+    <!-- End of Footer -->
 
-    <!-- JAVASCRIPT -->
-    <?php
-        include_once("../components/end.php");
-    ?>
-    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+</div>
+<!-- End of Content Wrapper -->
 
-    <!-- Page level custom scripts -->
-    <script src="/js/demo/datatables-demo.js"></script>
-</body>
+</div>
+<!-- End of Page Wrapper -->
 
-</html>
+<!-- Scroll to Top Button-->
+<?php
+include_once("../components/modals/backToTop.php");
+?>
+<!-- Logout Modal-->
+<?php
+include_once("../components/modals/logout.php");
+?>
+
+<!-- JAVASCRIPT -->
+<?php
+include_once("../components/end.php");
+?>

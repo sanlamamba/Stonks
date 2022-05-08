@@ -2,7 +2,11 @@
 
 class Utilisateur extends Dbh
 {
-
+  private $type = [
+    "0" => "admin",
+    "1" => "client",
+    "2" => "fournisseur",
+  ];
   //READ
   public function getUtilisateurs()
   {
@@ -14,6 +18,17 @@ class Utilisateur extends Dbh
       return $result;
     };
   }
+  public function searchUser($search)
+  {
+    $sql = "SELECT * FROM utilisateurs WHERE nom LIKE '%$search%' OR prenom LIKE '%$search%' OR id LIKE '%$search%'";
+    $stmt = $this->connect()->prepare($sql);
+    $stmt->execute();
+
+    while ($result = $stmt->fetchAll()) {
+      return $result;
+    }
+  }
+
 
   public function getUtilisateurByID($id)
   {
@@ -21,9 +36,9 @@ class Utilisateur extends Dbh
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
 
-    while ($result = $stmt->fetchAll()) {
-      return $result;
-    };
+    // send result to a variable and return it
+    $result = $stmt->fetch();
+    return $result;
   }
   public function getUtilisateurByType($type)
   {

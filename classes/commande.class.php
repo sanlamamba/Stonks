@@ -1,12 +1,12 @@
 <?php
 
-class Stock extends Dbh
+class Commande extends Dbh
 {
 
   //READ
-  public function getStocks()
+  public function getCommandes()
   {
-    $sql = "SELECT * FROM stocks";
+    $sql = "SELECT * FROM commande";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute();
 
@@ -15,15 +15,32 @@ class Stock extends Dbh
     };
   }
 
-  public function getStockByID($id)
+  // get commande by id
+  public function getCommandeByID($id)
   {
-    $sql = "SELECT * FROM stocks WHERE id = ?";
+    $sql = "SELECT * FROM commande WHERE id = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
     // send result to a variable and return it
-    $result = $stmt->fetch();
-    return $result;
+
+    while ($result = $stmt->fetchAll()) {
+      return $result;
+    }
   }
+
+  // get commandes by client
+  public function getCommandesByClient($client_id)
+  {
+    $sql = "SELECT * FROM commande WHERE client_id = ?";
+    $stmt = $this->connect()->prepare($sql);
+    $stmt->execute([$client_id]);
+    // send result to a variable and return it
+
+    while ($result = $stmt->fetchAll()) {
+      return $result;
+    }
+  }
+
 
   //BY CAtEGORIE
   // public function getUtilisateurByType($type)
@@ -43,14 +60,21 @@ class Stock extends Dbh
   //END READ
 
   //CREATE
-
-  public function addStock($designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id)
+  // create a new commande with client as null
+  public function addCommande($client, $panier, $date)
   {
-    echo "<script>alert('yes')</script>";
-    $sql = "INSERT INTO `stocks` (`id`, `designation`, `quantite`, `prix`, `categorie_id`, `type`, `fournisseurs_id`) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
+    echo '<script>alert("yes")</script>';
+    // reformat date to insert in database
+    $dateC = date("d/m/Y");
+    $dateL = date('d/m/Y', strtotime($date));
+
+    $sql = "INSERT INTO `commande` (`id`, `date_commande`, `date_livraison`, `client_id`, `panier_id`, `status`) VALUES (NULL, ?, ?, ?, ?, ?);";
     $stmt = $this->connect()->prepare($sql);
-    $stmt->execute([$designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id]);
+    echo '<script>alert("pass")</script>';
+
+    $stmt->execute([$dateC, $dateL, $client, $panier, "En Attente"]);
   }
+
 
   //END CREATE
 

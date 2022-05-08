@@ -24,6 +24,20 @@ function checkString($string)
     return $string;
 }
 
+// function to generate random id from date and time to use as id
+function generateId()
+{
+    // generate random id from 0-9 and a-z and A-Z
+    $id = "";
+    $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $charactersLength = strlen($characters);
+    for ($i = 0; $i < 6; $i++) {
+        $id .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $id;
+}
+
+
 
 
     // $password_salt = '$2y$11$'.substr(bin2hex(openssl_random_pseudo_bytes(32)), 0, 22);

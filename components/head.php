@@ -15,10 +15,10 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/index.css">
     <?php
-            // include_once("../functions/functions.php");
-            include_once("../includes/class-autoload.inc.php");
-            // echo checkMyPassword("password", "$2y$11$055fda95Pf3b9a58b32080ulVtsp1kmRnhNp6mpjSVk7.YxZNKQ5Y6 ");
-            ?>
+    include_once("../functions/functions.php");
+    include_once("../includes/class-autoload.inc.php");
+    // echo checkMyPassword("password", "$2y$11$055fda95Pf3b9a58b32080ulVtsp1kmRnhNp6mpjSVk7.YxZNKQ5Y6 ");
+    ?>
 
 
 </head>
