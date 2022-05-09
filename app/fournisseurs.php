@@ -53,16 +53,17 @@ include_once("../components/sidebar.php")
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-light table-bordered table-striped" id="dataTable" width="100%"
+                            cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Nom</th>
-                                    <th>Prenom</th>
-                                    <th>Telephone</th>
-                                    <th>Email</th>
-                                    <th>Adresse</th>
-                                    <th>Type</th>
-                                    <th>Action</th>
+                                    <th class="bg-primary text-white">Nom</th>
+                                    <th class="bg-primary text-white">Prenom</th>
+                                    <th class="bg-primary text-white">Telephone</th>
+                                    <th class="bg-primary text-white">Email</th>
+                                    <th class="bg-primary text-white">Adresse</th>
+                                    <th class="bg-primary text-white">Type</th>
+                                    <th class="bg-primary text-white">Action</th>
                                 </tr>
                             </thead>
 

@@ -2,11 +2,8 @@
 include "../components/head.php";
 $stocks = new Stock();
 $fournisseur = new Utilisateur();
+$categories = new Categorie();
 $list_fournisseur = $fournisseur->getUtilisateurByType('fournisseur');
-// var_dump($list_fournisseur);
-
-
-// $categories = new Categorie();
 
 ?>
 
@@ -96,16 +93,17 @@ include_once("../components/sidebar.php")
 
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-light table-bordered table-striped" id="dataTable" width="100%"
+                            cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Designation</th>
-                                    <th>En Stock</th>
-                                    <th>P.U.</th>
-                                    <th>Type</th>
-                                    <th>Categorie</th>
-                                    <th>Fournisseur</th>
-                                    <th>Action</th>
+                                    <th class="bg-primary">Designation</th>
+                                    <th class="bg-primary">En Stock</th>
+                                    <th class="bg-primary">P.U.</th>
+                                    <th class="bg-primary">Type</th>
+                                    <th class="bg-primary">Categorie</th>
+                                    <th class="bg-primary">Fournisseur</th>
+                                    <th class="bg-primary">Action</th>
                                 </tr>
                             </thead>
 

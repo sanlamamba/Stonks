@@ -15,7 +15,7 @@
     <li class="nav-item">
         <a class="nav-link" href="/stonks/app/fournisseurs.php">
             <i class="fas fa-fw fa-book"></i>
-            <span>Gestions Forunisseurs</span></a>
+            <span>Gestions Fournisseurs</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="/stonks/app/commandes.php">

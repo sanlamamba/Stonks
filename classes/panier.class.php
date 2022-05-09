@@ -21,13 +21,11 @@ class Panier extends Dbh
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
     // send result to a variable and return it
-    $result = $stmt->fetch();
-    return $result;
 
 
-    // while ($result = $stmt->fetchAll()) {
-    // return $result;
-    // };
+    while ($result = $stmt->fetchAll()) {
+      return $result;
+    };
   }
 
   // get panier by panier id
@@ -105,6 +103,13 @@ class Panier extends Dbh
   //END UPDATE
 
   //DELETE
+  // delete panier by id
+  public function deletePanierByPanierID($id)
+  {
+    $sql = "DELETE FROM `paniers` WHERE `paniers`.`panier_id` = ?;";
+    $stmt = $this->connect()->prepare($sql);
+    $stmt->execute([$id]);
+  }
 
   public function delUtilisateur($id)
   {

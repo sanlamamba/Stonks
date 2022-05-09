@@ -11,7 +11,7 @@ if (isset($_POST['token-client'])) {
 ?>
 <?php
 if (isset($_GET['edit'])) {
-    $utilisateur = $client->getUtilisateurByID($_POST['id'])[0];
+    $utilisateur = $client->getUtilisateurByID($_POST['id']);
     var_dump($utilisateur);
 }
 ?>

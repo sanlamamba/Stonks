@@ -127,7 +127,7 @@ include_once("../components/sidebar.php")
                         </form>
                     </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-striped table-light" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th class='bg-primary text-white'>Date de la fourniture</th>

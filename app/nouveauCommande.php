@@ -21,7 +21,13 @@ if (isset($_POST['commander'])) {
     } else {
         // head to 404 page
         header("Location: 404.php");
+        exit();
     }
+}
+if (isset($_GET['cancel'])) {
+    // cancel commande
+    $paniers->deletePanierByPanierID($panier);
+    exit();
 }
 
 if (isset($_GET['panier'])) {
@@ -34,6 +40,7 @@ if (isset($_POST['add'])) {
         $paniers->addPanier($_POST['produit'], $_POST['quantite'], $panier);
         header("Location: nouveauCommande.php?panier=$panier");
     } else {
+        // delete all from panier
         $paniers->addPanier($_POST['produit'], $_POST['quantite'], $panier);
     }
 
@@ -132,13 +139,14 @@ if (isset($_POST['add'])) {
                             </h6>
                         </div>
                         <div class='card-body'>
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-light table-bordered table-striped" id="dataTable" width="100%"
+                                cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Produit</th>
-                                        <th>P.U</th>
-                                        <th>Qte</th>
-                                        <th>PTTC</th>
+                                        <th class="bg-primary text-white">Produit</th>
+                                        <th class="bg-primary text-white">P.U</th>
+                                        <th class="bg-primary text-white">Qte</th>
+                                        <th class="bg-primary text-white">PTTC</th>
 
                                     </tr>
                                 </thead>
@@ -180,7 +188,10 @@ if (isset($_POST['add'])) {
                                 <tfoot>
                                     <tr>
                                         <th colspan="1">
-                                            <a href='Commandes.php' class='btn btn-danger'> Annuler </a>
+                                            <a href='<?= $_SERVER['REQUEST_URI'] . "&?cancel" ?>'
+                                                class='btn btn-danger'>
+                                                Annuler
+                                            </a>
                                         </th>
                                         <td colspan="2"> Total de la commande </td>
                                         <th colspan="2">

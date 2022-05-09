@@ -36,9 +36,11 @@ if (isset($_GET['client'])) {
     $commande = $commandes->getCommandesByClient($client_filter['id']);
 
     // send commande dates to a variable and return it
-    foreach ($commande as $key => $value) {
-        array_push($date_array, $value['date_commande']);
-    };
+    if (!empty($commande)) {
+        foreach ($commande as $c) {
+            array_push($date_array, $c['date_commande']);
+        }
+    }
     $date_array = array_unique($date_array);
 }
 if (isset($_GET['date'])) {
@@ -77,7 +79,7 @@ include_once("../components/sidebar.php")
             <!-- Page Heading -->
             <h1 class="h3 mb-2 text-gray-800">
                 Gestion des livraisons
-                <?= $client_filter !== null ? "de " . $client_filter['nom'] . " " . $client_filter['prenom'] : "? " ?>
+                <?= $client_filter !== null ? "de " . $client_filter['nom'] . " " . $client_filter['prenom'] : "." ?>
             </h1>
             <?php
             if ($client_filter !== null) {
@@ -104,14 +106,19 @@ include_once("../components/sidebar.php")
             <div class="card shadow mb-2">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">
-                        Commande #1 ? Veuillez renseigner les informations
+                        <?php
+                        if (isset($_GET['commande'])) { ?>
+                        Livraison de la Commande n° <?= $_GET['commande'] ?>
+                        <?php } else { ?>
+                        Liste des livraisons
+                        <?php } ?>
                     </h6>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <form class="col-5 mb-4">
-                            <!-- SEARCH BY CLIENT INPUT -->
-                            <label for="searchByClient">
+                        <!-- <form class="col-5 mb-4"> -->
+                        <!-- SEARCH BY CLIENT INPUT -->
+                        <!-- <label for="searchByClient">
                                 Rechercher par client
                             </label>
                             <div class="row d-flex">
@@ -120,21 +127,21 @@ include_once("../components/sidebar.php")
                                         id="searchByClient" placeholder="Entrer le nom, prenom ou id du client">
                                 </div>
                                 <!-- SUBMIT input only icon -->
-                                <form class="col-2">
-                                    <button type="submit" class="btn btn-primary " type="submit">
-                                        <span class="icon text-white-60 ">
-                                            <i class="fas fa-search"></i>
-                                        </span>
-                                    </button>
-                                </form>
-
-                            </div>
-
+                        <!-- <form class="col-2">
+                            <button type="submit" class="btn btn-primary " type="submit">
+                                <span class="icon text-white-60 ">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </button>
                         </form>
+
+                    </div>
+
+                    </form> -->
                     </div>
                     <form class="row d-flex align-items-end">
 
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label for="exampleFormControlSelect1">
                                     <small>
@@ -164,7 +171,7 @@ include_once("../components/sidebar.php")
                         </div>
                         <?php
                         if ($client_filter !== null) { ?>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label for="exampleFormControlSelect1">
                                     <small>
@@ -220,20 +227,30 @@ include_once("../components/sidebar.php")
                                     </span>
                             </div>
                         </div>
-
+                        <?php if (isset($_GET['client'])) { ?>
+                        <div class="col-2">
+                            <!-- erase filters button -->
+                            <div class="form-group">
+                                <a href='<?= $_SERVER['PHP_SELF'] ?>' class="btn btn-outline-warning " type="submit">
+                                    Effacer les filtres
+                                </a>
+                            </div>
+                        </div>
+                        <?php } ?>
                     </form>
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-light table-bordered table-striped" id="dataTable" width="100%"
+                            cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>N Comande</th>
-                                    <th>Date</th>
-                                    <th>Date livraison</th>
-                                    <th>Details</th>
-                                    <th>Modifier</th>
-                                    <th>Livraison</th>
-                                    <th>Supprimer</th>
-                                    <th>Imprimer Facture</th>
+                                    <th class='bg-primary text-white'>N Comande</th>
+                                    <th class='bg-primary text-white'>Date</th>
+                                    <th class='bg-primary text-white'>Date livraison</th>
+                                    <th class='bg-primary text-white'>Details</th>
+                                    <th class='bg-primary text-white'>Modifier</th>
+                                    <th class='bg-primary text-white'>Livraison</th>
+                                    <th class='bg-primary text-white'>Supprimer</th>
+                                    <th class='bg-primary text-white'>Imprimer Facture</th>
                                 </tr>
                             </thead>
 
@@ -250,7 +267,8 @@ include_once("../components/sidebar.php")
                                     <td>
                                         <?php
                                                 if (!isset($_GET['view'])) { ?>
-                                        <a href='<?= $_SERVER['REQUEST_URI'] . '&view' ?>' class='btn btn-success'>
+                                        <a href='<?= $_SERVER['PHP_SELF'] . "?client=" . $c['client_id'] . 'date=' . $c['date_commande'] . "&commande=" . $c['id'] . '&view' ?>'
+                                            class='btn btn-success'>
                                             <i class="fas fa-fw fa-eye"></i>
                                         </a>
                                         <?php } else { ?>
@@ -295,26 +313,29 @@ include_once("../components/sidebar.php")
                 <div class="card-body">
 
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-light table-bordered table-striped" id="dataTable" width="100%"
+                            cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Designation</th>
-                                    <th>P.U.</th>
-                                    <th>Qte Commandée</th>
-                                    <th>PTTC</th>
-                                    <th>Qte Livrée</th>
-                                    <th>Qte a livrée</th>
-                                    <th>Qte&nbsp;non&nbsp;livrée</th>
-                                    <th>Modifier</th>
-                                    <th>Supprimer</th>
+                                    <th class="bg-primary text-white">Designation</th>
+                                    <th class="bg-primary text-white">P.U.</th>
+                                    <th class="bg-primary text-white">Qte Commandée</th>
+                                    <th class="bg-primary text-white">PTTC</th>
+                                    <th class="bg-primary text-white">Qte Livrée</th>
+                                    <th class="bg-primary text-white">Qte a livrée</th>
+                                    <th class="bg-primary text-white">Qte&nbsp;non&nbsp;livrée</th>
+                                    <th class="bg-primary text-white">Modifier</th>
+                                    <th class="bg-primary text-white">Supprimer</th>
                                 </tr>
                             </thead>
 
                             <tbody>
+
                                 <?php
                                     if ($commande !== null) {
-                                        $panier_id = $c['panier_id'];
-                                        foreach ($paniers->getPanierByPanierID($panier_id) as $panier) {
+                                        $panier =  $paniers->getPanierByPanierID($c['panier_id']);
+                                        var_dump($panier);
+                                        foreach ($panier as $panier) {
                                         } ?>
                                 <tr>
                                     <td>

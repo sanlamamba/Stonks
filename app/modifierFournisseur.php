@@ -11,7 +11,7 @@ if (isset($_POST['token-fournisseur'])) {
 ?>
 <?php
 if (isset($_GET['edit'])) {
-    $utilisateur = $fournisseur->getUtilisateurByID($_POST['id'])[0];
+    $utilisateur = $fournisseur->getUtilisateurByID($_POST['id']);
     // var_dump($utilisateur);
 }
 ?>

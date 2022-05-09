@@ -5,7 +5,9 @@ $client = new Utilisateur();
 if (isset($_POST['token-client'])) {
     var_dump($_POST);
     $client->addUtilisateurClient($_POST['nom'], $_POST['prenom'], $_POST['email'], $_POST['adresse'], $_POST['telephone']);
+
     header("Location: clients.php");
+    exit();
 }
 ?>
 <!-- SIDEBAR -->
@@ -71,9 +73,8 @@ if (isset($_POST['token-client'])) {
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="tel" pattern="[7]{1}[0-9]{8}" class="form-control form-control-user"
-                                        id="exampleInputEmail" placeholder="Numero de Telephone" name='telephone'
-                                        required />
+                                    <input type="tel" class="form-control form-control-user" id="exampleInputEmail"
+                                        placeholder="Numero de Telephone" name='telephone' required />
                                 </div>
 
                                 <hr>

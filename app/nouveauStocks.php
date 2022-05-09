@@ -5,6 +5,8 @@
 <?php
 $fournisseurs = new Utilisateur();
 $stock = new Stock();
+$categories = new Categorie();
+
 if (isset($_POST['token-client'])) {
     var_dump($_POST);
     $stock->addStock($_POST['designation'], $_POST['quantite'], $_POST['prix'], $_POST['categorie'], $_POST['type'], $_POST['fournisseur']);
@@ -83,13 +85,15 @@ if (isset($_POST['token-client'])) {
                                     </p>
                                     <div class='col-7'>
                                         <select name='categorie' class='form-control'>
-                                            <option default value='1'>
+                                            <option default value=''>
                                                 Selectionner une categorie
                                             </option>
-                                            <option default value='1'>
-                                                Boisson
-                                            </option>
-
+                                            <?php
+                                            $categories = $categories->getCategories();
+                                            foreach ($categories as $categorie) {
+                                                echo "<option value='" . $categorie['id'] . "'>" . $categorie['label'] . "</option>";
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                     <div class='col-5'>

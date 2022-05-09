@@ -42,6 +42,31 @@ class Commande extends Dbh
     }
   }
 
+  // get commandes by date asc
+  public function getCommandesByDateAsc()
+  {
+    $sql = "SELECT * FROM commande ORDER BY date ASC";
+    $stmt = $this->connect()->prepare($sql);
+    $stmt->execute();
+
+    while ($result = $stmt->fetchAll()) {
+      return $result;
+    };
+  }
+
+  // get commandes by date desc
+  public function getCommandesByDateOrder($order)
+  {
+    $sql = "SELECT * FROM commande ORDER BY date_commande ?";
+    $stmt = $this->connect()->prepare($sql);
+    $stmt->execute($order);
+
+    while ($result = $stmt->fetchAll()) {
+      return $result;
+    };
+  }
+
+
 
   //BY CAtEGORIE
   // public function getUtilisateurByType($type)
