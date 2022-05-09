@@ -9,7 +9,7 @@
     <meta name="author" content="">
 
     <title>Stonks - Gestion de Stock</title>
-    <link rel="stylesheet" href="../scss/sb-admin-2.css">
+    <link rel="stylesheet" href="../sb-admin-2.css">
     <!-- font awesome cdn -->
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
