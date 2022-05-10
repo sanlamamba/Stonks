@@ -22,6 +22,36 @@
     include_once("../includes/class-autoload.inc.php");
     // echo checkMyPassword("password", "$2y$11$055fda95Pf3b9a58b32080ulVtsp1kmRnhNp6mpjSVk7.YxZNKQ5Y6 ");
     ?>
+    <?php
+    // start a session
+    session_start();
+    $admin = null;
+    // check if the user is logged in or not
+    if (!isset($_SESSION['token'])) {
+        // if php self not on login page
+        if (basename($_SERVER['PHP_SELF']) != 'login.php') {
+            // redirect to login page
+            header('Location: login.php');
+        }
+    } else {
+        if (basename($_SERVER['PHP_SELF']) == 'login.php') {
+            // redirect to login page
+            header('Location: clients.php');
+            $admin = new Admin();
+            $admin = $admin->getAdminByToken($_SESSION['token']);
+            var_dump($admin);
+            $nom = $admin['nom'];
+            $prenom = $admin['prenom'];
+
+
+            // set admin nom and prenom to  javascipt local storage
+            echo "<script>
+            localStorage.setItem('nom', '$nom');
+            localStorage.setItem('prenom', '$prenom');
+            </script>";
+        }
+    }
+    ?>
 
 
 </head>

@@ -44,3 +44,15 @@ function generateId()
     }
     return $id;
 }
+
+// sanitize string
+function sanitizeString($string)
+{
+    $string = str_replace("'", "''", $string);
+    $string = str_replace("\\", "\\\\", $string);
+    $string = str_replace("\"", "\\\"", $string);
+    $string = str_replace("\n", "\\n", $string);
+    $string = str_replace("\r", "\\r", $string);
+    $string = str_replace("\t", "\\t", $string);
+    return $string;
+}

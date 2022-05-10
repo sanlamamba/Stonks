@@ -51,9 +51,10 @@
     <hr class="sidebar-divider my-0">
 
     <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a href='deconnexion.php' class="nav-link" href="index.html">
             <i class="fas fa-fw fa-power-off"></i>
-            <span>Deconnexion</span></a>
+            <span>Deconnexion</span>
+        </a>
     </li>
 
     <hr class="sidebar-divider mb-2">

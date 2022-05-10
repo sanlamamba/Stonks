@@ -17,6 +17,8 @@ class Stock extends Dbh
 
   public function getStockByID($id)
   {
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "SELECT * FROM stocks WHERE id = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
@@ -25,28 +27,18 @@ class Stock extends Dbh
     return $result;
   }
 
-  //BY CAtEGORIE
-  // public function getUtilisateurByType($type)
-  // {
-  //   $sql = "SELECT * FROM utilisateurs WHERE type = ?";
-  //   $stmt = $this->connect()->prepare($sql);
-  //   $stmt->execute([$type]);
-
-  //   while ($result = $stmt->fetchAll()) {
-  //     return $result;
-  //   };
-  // }
-
-
-
-
-  //END READ
 
   //CREATE
 
   public function addStock($designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id)
   {
-    echo "<script>alert('yes')</script>";
+    $designation = htmlspecialchars(sanitizeString($designation));
+    $quantite = htmlspecialchars(sanitizeString($quantite));
+    $prix = htmlspecialchars(sanitizeString($prix));
+    $categorie_id = htmlspecialchars(sanitizeString($categorie_id));
+    $type = htmlspecialchars(sanitizeString($type));
+    $fournisseur_id = htmlspecialchars(sanitizeString($fournisseur_id));
+
     $sql = "INSERT INTO `stocks` (`id`, `designation`, `quantite`, `prix`, `categorie_id`, `type`, `fournisseurs_id`) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id]);
@@ -57,6 +49,14 @@ class Stock extends Dbh
   // UPDATE
   public function updateStock($id, $designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id)
   {
+    $id = htmlspecialchars(sanitizeString($id));
+    $designation = htmlspecialchars(sanitizeString($designation));
+    $quantite = htmlspecialchars(sanitizeString($quantite));
+    $prix = htmlspecialchars(sanitizeString($prix));
+    $categorie_id = htmlspecialchars(sanitizeString($categorie_id));
+    $type = htmlspecialchars(sanitizeString($type));
+    $fournisseur_id = htmlspecialchars(sanitizeString($fournisseur_id));
+
     $sql = "UPDATE `stocks` SET `designation` = ?, `quantite` = ?, `prix` = ?, `categorie_id` = ?, `type` = ?, `fournisseurs_id` = ? WHERE `stocks`.`id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id, $id]);
@@ -64,23 +64,23 @@ class Stock extends Dbh
   // update quantity of stock
   public function updateStockQuantite($quantite, $id)
   {
+    $quantite = htmlspecialchars(sanitizeString($quantite));
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "UPDATE `stocks` SET `quantite` = ? WHERE `stocks`.`id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$quantite, $id]);
   }
-
-
-
   //END UPDATE
 
   //DELETE
-
-  public function delUtilisateur($id)
+  public function delStock($id)
   {
-    $sql = "DELETE FROM utilisateurs WHERE id = ?";
+    $id = htmlspecialchars(sanitizeString($id));
+
+    $sql = "DELETE FROM stocks WHERE id = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
   }
-
   //END DELETE
 }

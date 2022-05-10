@@ -1,7 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php
-    include_once("../components/head.php");
+include_once("../components/head.php");
+
+$admin = new Admin();
+
+include("securimage/securimage.php");
+//on définit un nouvel objet de type securimage
+$securimage = new Securimage();
+// if (isset($_POST['submit'])) {
+//     $admin->addAdmin("Lamamba", "San", "lamamba@gmail.com", "password123");
+//     $auth = $admin->authenticateUser($_POST['email'], $_POST['password']);
+//     var_dump($auth);
+// }
+
+if (isset($_POST['submit'])) {
+
+    if ($securimage->check($_POST['captcha']) == false) {
+        // alert with javascript error message
+        echo '<script>alert("The security code entered was incorrect.");</script>';
+    } else {
+        // authentication goes here
+        $auth = $admin->authenticateUser($_POST['email'], $_POST['password']);
+        if ($auth != false) {
+
+            // set token to session
+            $_SESSION['token'] = $auth;
+            // redirect to dashboard
+            header("Location: clients.php");
+        }
+    }
+}
+
+
+
 
 ?>
 
@@ -28,21 +58,22 @@
                                         <hr>
 
                                     </div>
-                                    <form class="user">
+                                    <form method="POST" class="user">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
+                                            <input required type="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Votre Adresse Mail" name='email'>
                                         </div>
                                         <div class="form-group">
                                             <div class='row'>
                                                 <div class='col-10'>
-                                                    <input type="password" class="form-control form-control-user"
-                                                        id="exampleInputPassword" placeholder="Mot de passe"
-                                                        name='password'>
+                                                    <input required type="password"
+                                                        class="form-control form-control-user" id="exampleInputPassword"
+                                                        placeholder="Mot de passe" name='password'>
                                                 </div>
-                                                <button class='btn btn-light col-2'> &#128065; </button>
+                                                <button type="button" class='btn btn-light col-2'> &#128065; </button>
                                             </div>
+
 
                                         </div>
                                         <div class="form-group">
@@ -52,8 +83,22 @@
                                                     moi ?</label>
                                             </div>
                                         </div>
-                                        <input type="submit" class="btn btn-primary btn-user btn-block"
-                                            value='Connexion'>
+                                        <!-- Captcha  -->
+                                        <div class="form-group">
+                                            <img src="securimage/securimage_show.php" alt="CAPTCHA Image"
+                                                class="img-fluid" />
+                                            <a href="<?= $_SERVER['PHP_SELF'] ?>" class="btn btn-link">
+                                                <img src="securimage/images/refresh.png" alt="Reload Image" /> </a>
+                                        </div>
+                                        <!-- Input for captcha -->
+                                        <div class="form-group">
+                                            <input type="text" name="captcha" class="form-control"
+                                                placeholder="Entrez le code" required />
+                                        </div>
+
+
+                                        <input name="submit" type="submit" class="btn btn-primary btn-user btn-block"
+                                            value='Connexion' />
                                     </form>
                                     <hr>
                                     <div class="text-center">
@@ -71,17 +116,3 @@
         </div>
 
     </div>
-
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-</body>
-
-</html>

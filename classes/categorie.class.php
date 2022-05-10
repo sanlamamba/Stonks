@@ -17,6 +17,8 @@ class Categorie extends Dbh
 
   public function getCategoriesByID($id)
   {
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "SELECT * FROM categories WHERE id = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
@@ -33,6 +35,8 @@ class Categorie extends Dbh
 
   public function addCategories($label)
   {
+    $label = htmlspecialchars(sanitizeString($label));
+
     $sql = "INSERT INTO `categories` (`id`, `label`) VALUES (NULL, ?)";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$label]);
@@ -52,6 +56,8 @@ class Categorie extends Dbh
 
   public function delCategories($id)
   {
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "DELETE FROM categories WHERE id = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);

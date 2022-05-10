@@ -17,6 +17,8 @@ class Panier extends Dbh
 
   public function getPanierByID($id)
   {
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "SELECT * FROM paniers WHERE id = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
@@ -31,6 +33,8 @@ class Panier extends Dbh
   // get panier by panier id
   public function getPanierByPanierID($panier_id)
   {
+    $panier_id = htmlspecialchars(sanitizeString($panier_id));
+
     $sql = "SELECT * FROM paniers WHERE panier_id = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$panier_id]);
@@ -64,7 +68,10 @@ class Panier extends Dbh
 
   public function addPanier($produit, $quantite, $panier)
   {
-    echo "<script>alert('yes')</script>";
+    $produit = htmlspecialchars(sanitizeString($produit));
+    $quantite = htmlspecialchars(sanitizeString($quantite));
+    $panier = htmlspecialchars(sanitizeString($panier));
+
     $sql = "INSERT INTO `paniers` (`id`, `produit_id`, `quantite`, `livrer`, `panier_id`) VALUES (NULL, ?, ?, '0',?);";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$produit, $quantite, $panier]);
@@ -78,6 +85,14 @@ class Panier extends Dbh
   // UPDATE
   public function updatePanier($id, $designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id)
   {
+    $id = htmlspecialchars(sanitizeString($id));
+    $designation = htmlspecialchars(sanitizeString($designation));
+    $quantite = htmlspecialchars(sanitizeString($quantite));
+    $prix = htmlspecialchars(sanitizeString($prix));
+    $categorie_id = htmlspecialchars(sanitizeString($categorie_id));
+    $type = htmlspecialchars(sanitizeString($type));
+    $fournisseur_id = htmlspecialchars(sanitizeString($fournisseur_id));
+
     $sql = "UPDATE `paniers` SET `designation` = ?, `quantite` = ?, `prix` = ?, `categorie_id` = ?, `type` = ?, `fournisseurs_id` = ? WHERE `paniers`.`id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id, $id]);
@@ -85,6 +100,9 @@ class Panier extends Dbh
   // update quantity of Panier
   public function updatePanierQuantite($quantite, $id)
   {
+    $quantite = htmlspecialchars(sanitizeString($quantite));
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "UPDATE `paniers` SET `quantite` = ? WHERE `paniers`.`id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$quantite, $id]);
@@ -93,6 +111,9 @@ class Panier extends Dbh
   // update livrer of Panier
   public function updatePanierLivrer($livrer, $id)
   {
+    $livrer = htmlspecialchars(sanitizeString($livrer));
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "UPDATE `paniers` SET `livrer` = ? WHERE `paniers`.`id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$livrer, $id]);
@@ -106,17 +127,24 @@ class Panier extends Dbh
   // delete panier by id
   public function deletePanierByPanierID($id)
   {
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "DELETE FROM `paniers` WHERE `paniers`.`panier_id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
   }
 
-  public function delUtilisateur($id)
+  // delete panier by id
+  public function deletePanierByID($id)
   {
-    $sql = "DELETE FROM utilisateurs WHERE id = ?";
+    $id = htmlspecialchars(sanitizeString($id));
+
+    $sql = "DELETE FROM `paniers` WHERE `paniers`.`id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
   }
+
+
 
   //END DELETE
 }

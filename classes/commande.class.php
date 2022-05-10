@@ -19,6 +19,8 @@ class Commande extends Dbh
   // get commande by id
   public function getCommandeByID($id)
   {
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "SELECT * FROM commande WHERE id = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
@@ -32,6 +34,8 @@ class Commande extends Dbh
   // get commandes by client
   public function getCommandesByClient($client_id)
   {
+    $client_id = htmlspecialchars(sanitizeString($client_id));
+
     $sql = "SELECT * FROM commande WHERE client_id = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$client_id]);
@@ -57,6 +61,8 @@ class Commande extends Dbh
   // get commandes by date desc
   public function getCommandesByDateOrder($order)
   {
+    $sql = "SELECT * FROM commande ORDER BY date $order";
+
     $sql = "SELECT * FROM commande ORDER BY date_commande ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute($order);
@@ -68,20 +74,6 @@ class Commande extends Dbh
 
 
 
-  //BY CAtEGORIE
-  // public function getUtilisateurByType($type)
-  // {
-  //   $sql = "SELECT * FROM utilisateurs WHERE type = ?";
-  //   $stmt = $this->connect()->prepare($sql);
-  //   $stmt->execute([$type]);
-
-  //   while ($result = $stmt->fetchAll()) {
-  //     return $result;
-  //   };
-  // }
-
-
-
 
   //END READ
 
@@ -89,6 +81,10 @@ class Commande extends Dbh
   // create a new commande with client as null
   public function addCommande($client, $panier, $date)
   {
+    $client = htmlspecialchars(sanitizeString($client));
+    $panier = htmlspecialchars(sanitizeString($panier));
+    $date = htmlspecialchars(sanitizeString($date));
+
     echo '<script>alert("yes")</script>';
     // reformat date to insert in database
     $dateC = date("d/m/Y");
@@ -107,6 +103,14 @@ class Commande extends Dbh
   // UPDATE
   public function updateStock($id, $designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id)
   {
+    $id = htmlspecialchars(sanitizeString($id));
+    $designation = htmlspecialchars(sanitizeString($designation));
+    $quantite = htmlspecialchars(sanitizeString($quantite));
+    $prix = htmlspecialchars(sanitizeString($prix));
+    $categorie_id = htmlspecialchars(sanitizeString($categorie_id));
+    $type = htmlspecialchars(sanitizeString($type));
+    $fournisseur_id = htmlspecialchars(sanitizeString($fournisseur_id));
+
     $sql = "UPDATE `stocks` SET `designation` = ?, `quantite` = ?, `prix` = ?, `categorie_id` = ?, `type` = ?, `fournisseurs_id` = ? WHERE `stocks`.`id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$designation, $quantite, $prix, $categorie_id, $type, $fournisseur_id, $id]);
@@ -114,6 +118,9 @@ class Commande extends Dbh
   // update quantity of stock
   public function updateStockQuantite($quantite, $id)
   {
+    $quantite = htmlspecialchars(sanitizeString($quantite));
+    $id = htmlspecialchars(sanitizeString($id));
+
     $sql = "UPDATE `stocks` SET `quantite` = ? WHERE `stocks`.`id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$quantite, $id]);
@@ -125,9 +132,12 @@ class Commande extends Dbh
 
   //DELETE
 
-  public function delUtilisateur($id)
+  // delete a commande
+  public function deleteCommande($id)
   {
-    $sql = "DELETE FROM utilisateurs WHERE id = ?";
+    $id = htmlspecialchars(sanitizeString($id));
+
+    $sql = "DELETE FROM `commande` WHERE `commande`.`id` = ?;";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$id]);
   }

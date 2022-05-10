@@ -17,6 +17,8 @@ class Fourniture extends Dbh
 
     public function getFournitureByID($id)
     {
+        $id = htmlspecialchars(sanitizeString($id));
+
         $sql = "SELECT * FROM fournitures WHERE id = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$id]);
@@ -29,6 +31,8 @@ class Fourniture extends Dbh
     //get fourniture by produit_id
     public function getFournitureByProduitID($id)
     {
+        $id = htmlspecialchars(sanitizeString($id));
+
         $sql = "SELECT * FROM fournitures WHERE produit_id = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$id]);
@@ -41,6 +45,9 @@ class Fourniture extends Dbh
     // get fourniture by produit_id and date
     public function getFournituresByDateAndProduit($id, $date)
     {
+        $id = htmlspecialchars(sanitizeString($id));
+        $date = htmlspecialchars(sanitizeString($date));
+
         $sql = "SELECT * FROM fournitures WHERE produit_id = ? AND date = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$id, $date]);
@@ -65,6 +72,8 @@ class Fourniture extends Dbh
     // get fourniture of date
     public function getFournituresByDate($date)
     {
+        $date = htmlspecialchars(sanitizeString($date));
+
         $sql = "SELECT * FROM fournitures WHERE date = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$date]);
@@ -78,6 +87,8 @@ class Fourniture extends Dbh
     // function to check if fourniture of particular product exists for today
     public function checkFournitureToday($id)
     {
+        $id = htmlspecialchars(sanitizeString($id));
+
         $sql = "SELECT * FROM fournitures WHERE date = ? AND produit_id = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([date("d/m/Y"), $id]);
@@ -93,6 +104,10 @@ class Fourniture extends Dbh
 
     public function addFourniture($qt_avant, $qt_fournie, $produit)
     {
+        $qt_avant = htmlspecialchars(sanitizeString($qt_avant));
+        $qt_fournie = htmlspecialchars(sanitizeString($qt_fournie));
+        $produit = htmlspecialchars(sanitizeString($produit));
+
         $date_curr = date("d/m/Y");
         $sql = "INSERT INTO `fournitures` (`id`, `quantite_avant`, `quantite_fournie`, `produit_id`, `date`) VALUES (NULL, ?, ?, ?, ?); ";
         $stmt = $this->connect()->prepare($sql);
@@ -104,6 +119,10 @@ class Fourniture extends Dbh
     //UPDATE
     public function updateFourniture($qt_fournie, $produit, $id)
     {
+        $qt_fournie = htmlspecialchars(sanitizeString($qt_fournie));
+        $produit = htmlspecialchars(sanitizeString($produit));
+        $id = htmlspecialchars(sanitizeString($id));
+
         $date_curr = date("d/m/Y");
         $sql = "UPDATE `fournitures` SET `quantite_fournie` = ?, `produit_id` = ?, `date` = ? WHERE `fournitures`.`id` = ?;";
         $stmt = $this->connect()->prepare($sql);
@@ -116,6 +135,8 @@ class Fourniture extends Dbh
     // DELETE
     public function deleteFourniture($id)
     {
+        $id = htmlspecialchars(sanitizeString($id));
+
         $sql = "DELETE FROM fournitures WHERE id = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$id]);
