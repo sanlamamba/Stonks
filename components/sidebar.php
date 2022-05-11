@@ -37,11 +37,7 @@
             <i class="fas fa-fw fa-plane"></i>
             <span>Gestions Livraisons</span></a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/stonks/app/facturations.php">
-            <i class="fas fa-fw fa-file-invoice"></i>
-            <span>Gestions Facturations</span></a>
-    </li>
+
     <li class="nav-item">
         <a class="nav-link" href="/stonks/app/admin.php">
             <i class="fas fa-fw fa-lock"></i>

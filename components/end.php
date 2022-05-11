@@ -1,11 +1,22 @@
-<!-- <script src="../vendor/jquery/jquery.min.js"></script> -->
-<!-- <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+<script>
+window.addEventListener("DOMContentLoaded", (event) => {
+    // SELECT BY ID VIEW TOGGLE
+    alert("yes");
+    document.addEventListener("contextmenu", (event) => event.preventDefault());
+    const viewToggle = document.getElementById("viewToggle");
 
-<!-- Core plugin JavaScript-->
-<!-- <script src="../vendor/jquery-easing/jquery.easing.min.js"></script> -->
-
-<!-- Custom scripts for all pages-->
-<!-- <script src="../js/sb-admin-2.min.js"></script> -->
-
-<!-- DEFER JAVASCRIPT  -->
-<script src="../functions/functions.js"></script>
+    //addeventlistener click to view toggle
+    viewToggle.addEventListener("click", (event) => {
+        alert("cvcvs");
+        //get the view toggle
+        //get all inputs with get elementbyid password
+        const passwordInputs = document.getElementById("password");
+        //if they are passwords change to text else change to password
+        if (passwordInputs.type === "password") {
+            passwordInputs.type = "text";
+        } else {
+            passwordInputs.type = "password";
+        }
+    });
+});
+</script>

@@ -49,11 +49,70 @@ function generateId()
 function sanitizeString($string)
 {
     //if pregmatch php tag is not available
-    if()
-
-
-    
-
+    if (preg_match("/<\?php/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    //if pregmatch script tag is not available
+    if (preg_match("/<script/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    //if pregmatch style tag is not available
+    if (preg_match("/<style/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    //if pregmatch iframe tag is not available
+    if (preg_match("/<iframe/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    // if pregmatch link tag is not available
+    if (preg_match("/<link/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    // if pregmatch meta tag is not available
+    if (preg_match("/<meta/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    // if pregmatch form tag is not available
+    if (preg_match("/<form/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    // if pregmatch input tag is not available
+    if (preg_match("/<input/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    // if pregmatch button tag is not available
+    if (preg_match("/<button/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    // if pregmatch select tag is not available
+    if (preg_match("/<select/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    // if pregmatch option tag is not available
+    if (preg_match("/<option/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    // if pregmatch textarea tag is not available
+    if (preg_match("/<textarea/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
+    // if pregmatch button tag is not available
+    if (preg_match("/<button/", $string)) {
+        // head to error page
+        header("Location: error.php");
+    }
 
     $string = str_replace("'", "''", $string);
     $string = str_replace("\\", "\\\\", $string);

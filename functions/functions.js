@@ -1,6 +1,7 @@
 window.addEventListener("DOMContentLoaded", (event) => {
   // SELECT BY ID VIEW TOGGLE
-  // alert("loaded");
+  alert("yes");
+  document.addEventListener("contextmenu", (event) => event.preventDefault());
   const viewToggle = document.getElementById("viewToggle");
 
   //addeventlistener click to view toggle

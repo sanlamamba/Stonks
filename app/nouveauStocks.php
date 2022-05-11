@@ -8,9 +8,9 @@ $stock = new Stock();
 $categories = new Categorie();
 
 if (isset($_POST['token-client'])) {
-    var_dump($_POST);
     $stock->addStock($_POST['designation'], $_POST['quantite'], $_POST['prix'], $_POST['categorie'], $_POST['type'], $_POST['fournisseur']);
-    // header("Location: stocks.php");
+    header("Location: stocks.php");
+    exit();
 }
 ?>
 
