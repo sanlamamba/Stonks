@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
 
     if ($securimage->check($_POST['captcha']) == false) {
         // alert with javascript error message
-        echo '<script>alert("The security code entered was incorrect.");</script>';
+        echo '<script>alert("Captcha Failed");</script>';
     } else {
         // authentication goes here
         $auth = $admin->authenticateUser($_POST['email'], $_POST['password']);
@@ -26,6 +26,8 @@ if (isset($_POST['submit'])) {
             $_SESSION['token'] = $auth;
             // redirect to dashboard
             header("Location: clients.php");
+        } else {
+            echo '<script>alert("Mot de passe ou email incorrecte.");</script>';
         }
     }
 }
@@ -64,17 +66,20 @@ if (isset($_POST['submit'])) {
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Votre Adresse Mail" name='email'>
                                         </div>
-                                        <div class="form-group">
-                                            <div class='row'>
+                                        <div class='form-group'>
+                                            <div class="row d-flex justify-content-center align-items-center">
+
                                                 <div class='col-10'>
                                                     <input required type="password"
                                                         class="form-control form-control-user" id="exampleInputPassword"
                                                         placeholder="Mot de passe" name='password'>
                                                 </div>
-                                                <button type="button" class='btn btn-light col-2'> &#128065; </button>
+                                                <div class="col-2">
+                                                    <button id="viewPassword" type="button" class='btn btn-light'>
+                                                        &#128065;
+                                                    </button>
+                                                </div>
                                             </div>
-
-
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -96,7 +101,6 @@ if (isset($_POST['submit'])) {
                                                 placeholder="Entrez le code" required />
                                         </div>
 
-
                                         <input name="submit" type="submit" class="btn btn-primary btn-user btn-block"
                                             value='Connexion' />
                                     </form>
@@ -114,5 +118,4 @@ if (isset($_POST['submit'])) {
             </div>
 
         </div>
-
     </div>

@@ -41,10 +41,10 @@ include_once "../components/sidebar.php"
                     cliquant ici
                 </a>.
                 <br />
-                Vous pouvez imprimer une liste des clients en
+                <!-- Vous pouvez imprimer une liste des clients en
                 <a href="imprimerClient.php">
                     cliquant ici
-                </a>.
+                </a>. -->
             </p>
             <!-- DataTales Example -->
             <div class="card shadow mb-4">

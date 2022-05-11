@@ -30,6 +30,7 @@ class Admin extends Dbh
   public function getAdminByToken($token)
   {
     $token = htmlspecialchars(sanitizeString($token));
+
     $sql = "SELECT * FROM admin WHERE token = ?";
     $stmt = $this->connect()->prepare($sql);
     $stmt->execute([$token]);
@@ -49,6 +50,7 @@ class Admin extends Dbh
     $prenom = htmlspecialchars(sanitizeString($prenom));
     $email = htmlspecialchars(sanitizeString($email));
     $pwd = htmlspecialchars(sanitizeString($pwd));
+
     echo '<script>alert("' . $pwd . '");</script>';
     // encrypt password using sha256
     $pwd = hash('sha256', $pwd . $this->secret_key);

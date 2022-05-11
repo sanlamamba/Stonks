@@ -48,6 +48,13 @@ function generateId()
 // sanitize string
 function sanitizeString($string)
 {
+    //if pregmatch php tag is not available
+    if()
+
+
+    
+
+
     $string = str_replace("'", "''", $string);
     $string = str_replace("\\", "\\\\", $string);
     $string = str_replace("\"", "\\\"", $string);

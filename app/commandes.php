@@ -34,10 +34,10 @@ include_once("../components/sidebar.php")
                     cliquant ici
                 </a>.
                 <br />
-                Vous pouvez imprimer une liste des commandes en
+                <!-- Vous pouvez imprimer une liste des commandes en
                 <a href="imprimerCommande.php">
                     cliquant ici
-                </a>.
+                </a>. -->
             </p>
             <!-- DataTales Example -->
             <div class="card shadow mb-4">

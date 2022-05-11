@@ -97,10 +97,10 @@ include_once("../components/sidebar.php")
                     cliquant ici
                 </a>.
                 <br />
-                Vous pouvez imprimer une liste des livraisons en
+                <!-- Vous pouvez imprimer une liste des livraisons en
                 <a href="imprimerlivraison.php">
                     cliquant ici
-                </a>.
+                </a>. -->
             </p>
             <!-- DataTales Example -->
             <div class="card shadow mb-2">
@@ -285,7 +285,7 @@ include_once("../components/sidebar.php")
                                     <td class='text-success'><?= $c['status'] ?></td>
                                     <td class='text-danger'>Indisponible</td>
                                     <td class='d-flex justify-content-center'>
-                                        <a href="#" class='btn btn-warning'>
+                                        <a href="imprimer.php?commande=<?= $c['id'] ?>" class='btn btn-warning'>
                                             <i class="fas fa-fw fa-print"></i>
                                         </a>
 

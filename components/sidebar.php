@@ -42,6 +42,12 @@
             <i class="fas fa-fw fa-file-invoice"></i>
             <span>Gestions Facturations</span></a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/stonks/app/admin.php">
+            <i class="fas fa-fw fa-lock"></i>
+            <span>Administration</span></a>
+    </li>
+
 
 
 
